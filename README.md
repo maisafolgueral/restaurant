@@ -1,5 +1,5 @@
 # Restaurant
-Projeto Final do curso FrontStart ministrado pela Isadora Stangarlin utilizandp Vue 2
+Projeto Final do curso FrontStart ministrado pela Isadora Stangarlin utilizando Vue 2
 
 ## Project setup
 ```
