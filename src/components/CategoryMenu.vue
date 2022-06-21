@@ -88,7 +88,7 @@ export default {
       }
 
       &.active {
-        background: @light-yellow;
+        background: @yellow;
         border-radius: 8px;
 
         p {
