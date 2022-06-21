@@ -1,43 +1,54 @@
 <template>
   <div class="items-list">
-    <ItemRestaurant 
-        v-for="item in itemsList" :key="item.id"
-        :item="item"
-    />
+    <ItemRestaurant v-for="item in itemsList" :key="item.id" :item="item" />
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import ItemRestaurant from './ItemRestaurant.vue';
+import ItemRestaurant from "./ItemRestaurant.vue";
 
 export default {
   name: "ItemsList",
   components: {
-    ItemRestaurant
+    ItemRestaurant,
   },
   data() {
     return {
-        itemsList: []
-    }
+      itemsList: [],
+    };
   },
-  created() {
-    axios.get("http://localhost:3000/burguers").then((response) => {
-      this.itemsList = response.data;
-    });
+  created() {},
+  computed: {
+    selectedCategory: {
+      get() {
+        return this.$store.state.selectedCategory;
+      },
+    },
+  },
+  methods: {
+    getItemsList() {
+      axios.get(`http://localhost:3000/${this.selectedCategory}`).then((response) => {
+        this.itemsList = response.data;
+      });
+    },
+  },
+  watch: {
+    selectedCategory() {
+      this.getItemsList();
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
-  .items-list {
-      margin: 50px;
-      display: flex;
+.items-list {
+  margin: 50px;
+  display: flex;
 
-      @media @tablets {
-        flex-wrap: wrap;
-        margin: 20px;
-      }
-        
+  @media @tablets {
+    flex-wrap: wrap;
+    margin: 20px;
   }
+}
 </style>
