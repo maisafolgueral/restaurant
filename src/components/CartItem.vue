@@ -1,26 +1,26 @@
 <template>
-  <div class="item">
-    <div class="item--quantity">
-      <button class="buttons" @click="decreaseQuantity(item.id)" :disabled="item.quantity == 0">-</button>
-      <span class="number">{{item.quantity}}</span>
-      <button class="buttons" @click="increaseQuantity(item.id)">+</button>
+    <div class="item">
+        <QuantityRestaurant :item="item" class="item--quantity" />
+        <div class="item--img-container">
+            <img class="item--img" :src="imagePath" />
+        </div>
+        <div class="content">
+            <h3 class="item--name">{{ item.name }}</h3>
+            <a class="item--observation">Adicionar observação</a>
+        </div>
+        <p class="item--price">{{ item.price | currency }}</p>
     </div>
-    <div class="item--img-container">
-        <img class="item--img" :src="imagePath" />
-    </div>
-    <div class="content">
-      <h3 class="item--name">{{ item.name }}</h3>
-      <a class="item--observation">Adicionar observação</a>
-    </div>
-    <p class="item--price">{{ item.price | currency}}</p>
-  </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
+import QuantityRestaurant from './QuantityRestaurant';
 
 export default {
-  name: "CartItem",
+  name: 'CartItem',
+  components: {
+    QuantityRestaurant,
+  },
   props: {
     item: {},
   },
@@ -37,10 +37,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      'increaseQuantity',
-      'decreaseQuantity'
-    ])
+    ...mapActions(['increaseQuantity', 'decreaseQuantity'])
   }
 };
 </script>
@@ -71,7 +68,9 @@ export default {
       background: none;
       border: 0;
 
-      &:focus {outline:0;}
+      &:focus {
+        outline:0;
+      }
     }
   }
 
@@ -110,9 +109,34 @@ export default {
 
   &--price {
     font-weight: 600;
-    font-size: 10px;
+    font-size: 18px;
     line-height: 27px;
     color: @yellow;
+  }
+
+  @media @tablets {
+    flex-wrap: wrap;
+
+    &--img-container {
+      order: 1;
+    }
+
+    .content {
+      order: 2;
+    }
+
+    &--quantity {
+      order: 3;
+      padding: 0;
+      width: 81px;
+      justify-content: center;
+    }
+
+    &--price {
+      order: 4;
+      padding: 0 20px;
+      margin: 5px 0;
+    }
   }
 }
 </style>
