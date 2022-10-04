@@ -25,6 +25,7 @@ export default {
                 return;
             }
 
+            // eslint-disable-next-line vue/no-mutating-props
             --this.item.quantity;
         },
         onIncreaseButtonClick() {
@@ -33,6 +34,7 @@ export default {
                 return;
             }
 
+           // eslint-disable-next-line vue/no-mutating-props
            ++this.item.quantity;
         }
     },
