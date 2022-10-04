@@ -3,13 +3,24 @@
         <button class="buttons" @click="onDecreaseButtonClick" :disabled="item.quantity == 0">-</button>
         <span class="number">{{ item.quantity }}</span>
         <button class="buttons" @click="onIncreaseButtonClick()">+</button>
+        <ModalRestaurant :show="showModal">
+            <div class="modal-content">
+                <h2>Deseja remover esse item do carrinho?</h2>
+                <button class="secondary-button" @click="onCancelButtonClick">Cancelar</button>
+                <button class="primary-button" @click="onRemoveButtonClick">Sim, remover</button>
+            </div>
+        </ModalRestaurant>
     </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
+import ModalRestaurant from './ModalRestaurant.vue';
 
 export default {
+    components: {
+        ModalRestaurant
+    },
     props: {
         item: {},
         useStore: {
@@ -17,11 +28,17 @@ export default {
             default: true
         }
     },
+    data() {
+        return {
+            showModal: false
+        }
+    },
     methods: {
         ...mapActions(['increaseQuantity', 'decreaseQuantity']),
         onDecreaseButtonClick() {
             if(this.useStore) {
                 this.decreaseQuantity(this.item.id);
+                if(!this.item.quantity) this.showModal = true;
                 return;
             }
 
@@ -36,6 +53,16 @@ export default {
 
            // eslint-disable-next-line vue/no-mutating-props
            ++this.item.quantity;
+        },
+        onCancelButtonClick() {
+            this.increaseQuantity(this.item.id);
+            this.showModal = false;
+        },
+        onRemoveButtonClick() {
+            this.showModal = false;
+            this.$nextTick(() => {
+                this.$store.dispatch('removeFromCart', this.item.id);
+            });
         }
     },
 };
@@ -59,8 +86,18 @@ export default {
         cursor: pointer;
         background: none;
         border: 0;
+
         &:focus {
             outline: 0;
+        }
+    }
+
+    .modal-content {
+        text-align: center;
+
+        button {
+            margin-left: 10px;
+            margin-top: 20px;                
         }
     }
 }
