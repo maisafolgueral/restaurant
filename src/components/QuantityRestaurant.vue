@@ -33,7 +33,7 @@ export default {
                 return;
             }
 
-            ++this.item.quantity;
+           ++this.item.quantity;
         }
     },
 };
