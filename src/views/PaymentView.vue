@@ -2,6 +2,7 @@
   <div class="payment">
     <div class="payment--content">
       <router-link to="/" class="payment--go-back">←️ Voltar</router-link>
+      <OrderRestaurant/>
     </div>
     <CartRestaurant v-if="isDesktop()"/>
   </div>
@@ -10,10 +11,12 @@
 <script>
 import CartRestaurant from "@/components/CartRestaurant.vue";
 import Mixin from "@/mixins/mixins";
+import OrderRestaurant from '@/components/OrderRestaurant.vue';
 
 export default {
   components: {
-    CartRestaurant
+    CartRestaurant,
+    OrderRestaurant
   },
   mixins: [Mixin]
 }
