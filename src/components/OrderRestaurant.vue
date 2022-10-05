@@ -62,8 +62,8 @@
           class="address-card"
           v-if="isDeliveryType && hasAddressInfo && savedAddress"
         >
-          <p>{{ formData.street.value }}, {{ formData.number.value }}</p>
-          <p>{{ formData.city.value }} - {{ formData.cep.value }}</p>
+          <p>{{ formData.city.value }}, {{ formData.cep.value }}</p>
+          <p>{{ formData.street.value }} - {{ formData.number.value }}</p>
         </div>
 
         <a @click="onShowAddressModal" v-if="isDeliveryType">{{
@@ -94,7 +94,7 @@
               value="cash"
               v-model="paymentType"
             />
-            <label for="store">Dinheiro</label>
+            <label for="cash">Dinheiro</label>
           </div>
         </div>
       </div>
@@ -173,11 +173,32 @@
         </button>
       </div>
     </ModalRestaurant>
+
+    <ModalRestaurant
+      :show="showInvalidAddressModal"
+      @on-modal-close="hideInvalidAddressModal"
+    >
+      <div class="invalid-address-modal">
+        <span v-html="warningIcon" class="icon"></span>
+        <span
+          >Na modalidade delivery é necessário adicionar um endereço
+          válido.</span
+        >
+      </div>
+    </ModalRestaurant>
+
+    <ModalRestaurant :show="showSucessModal" @on-modal-close="hideSucessModal">
+      <div class="sucess-modal">
+        <span v-html="sucessIcon" class="icon"></span>
+        <span>Pedido realizado com sucesso!</span>
+      </div>
+    </ModalRestaurant>
   </div>
 </template>
 
 <script>
 import ModalRestaurant from "@/components/ModalRestaurant";
+import feather from "feather-icons";
 
 export default {
   components: {
@@ -204,7 +225,7 @@ export default {
           valid: true,
           isValid: () => {
             this.formData.cellphone.valid =
-              !!this.formData.cellphone.value.length === 16;
+              this.formData.cellphone.value.length === 16;
           },
         },
         cep: {
@@ -249,12 +270,20 @@ export default {
         },
       },
       showAddressModal: false,
+      showInvalidAddressModal: false,
+      showSucessModal: false,
       deliveryType: "store",
       paymentType: "credit-card",
       savedAddress: false,
     };
   },
   computed: {
+    warningIcon() {
+      return feather.icons["alert-triangle"].toSvg();
+    },
+    sucessIcon() {
+      return feather.icons["check-circle"].toSvg();
+    },
     isAddressFormValid() {
       let isValid = true;
 
@@ -262,6 +291,14 @@ export default {
       isValid &= this.formData.city.valid;
       isValid &= this.formData.street.valid;
       isValid &= this.formData.number.valid;
+
+      return isValid;
+    },
+    isUserFormDataValid() {
+      let isValid = true;
+
+      isValid &= this.formData.cellphone.valid;
+      isValid &= this.formData.name.valid;
 
       return isValid;
     },
@@ -284,6 +321,10 @@ export default {
     triggerValidations() {
       this.formData.name.isValid();
       this.formData.cellphone.isValid();
+      if (this.isDeliveryType) {
+        this.triggerAddressFormValidations();
+        this.showInvalidAddressModal = !this.isAddressFormValid;
+      }
     },
     triggerAddressFormValidations() {
       this.formData.cep.isValid();
@@ -293,6 +334,8 @@ export default {
     },
     orderItens() {
       this.triggerValidations();
+      if(!this.isUserFormDataValid || !this.isAddressFormValid) return;
+      this.showSucessModal = true;
     },
     onShowAddressModal() {
       this.showAddressModal = true;
@@ -300,11 +343,17 @@ export default {
     hideAddressModal() {
       this.showAddressModal = false;
     },
+    hideSucessModal() {
+        this.$router.push({name: 'HomeView'});
+    },
     validateAddressForm() {
       this.triggerAddressFormValidations();
       if (!this.isAddressFormValid) return;
       this.savedAddress = true;
       this.showAddressModal = false;
+    },
+    hideInvalidAddressModal() {
+      this.showInvalidAddressModal = false;
     },
   },
 };
@@ -424,20 +473,31 @@ export default {
     }
   }
 
+  .invalid-address-modal, .sucess-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 20px;
+    .icon {
+      margin-bottom: 15px;
+    }
+  }
+
   @media @tablets {
     width: 100%;
     padding: 0;
 
     .modal-content {
       button + button {
-          margin-left: 5px;
-        }
+        margin-left: 5px;
       }
+    }
 
     .address-container {
-        .input-field + .input-field {
-            margin-left: 5px;
-        }
+      .input-field + .input-field {
+        margin-left: 5px;
+      }
     }
   }
 }
