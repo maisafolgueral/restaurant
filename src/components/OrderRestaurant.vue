@@ -34,7 +34,7 @@
 
       <div class="address">
         <p class="section-title">Endereço</p>
-        <div class="delivery-type">
+        <div class="radio-container">
           <div class="radio-options">
             <input
               type="radio"
@@ -66,6 +66,34 @@
         <a @click="onShowAddressModal" v-if="isDeliveryType">{{
           addressButtonLabel
         }}</a>
+      </div>
+
+      <div class="payment">
+        <p class="section-title">Pagamento</p>
+        <p>Método de pagamento:</p>
+        <div class="radio-container">
+          <div class="radio-options">
+            <input
+              type="radio"
+              name="payment-type"
+              id="credit-card"
+              value="credit-card"
+              v-model="paymentType"
+            />
+            <label for="store">Cartão</label>
+          </div>
+
+          <div class="radio-options">
+            <input
+              type="radio"
+              name="payment-type"
+              id="cash"
+              value="cash"
+              v-model="paymentType"
+            />
+            <label for="store">Dinheiro</label>
+          </div>
+        </div>
       </div>
     </form>
     <button class="primary-button" @click="orderItens">Concluir pedido</button>
@@ -219,6 +247,7 @@ export default {
       },
       showAddressModal: false,
       deliveryType: "store",
+      paymentType: 'credit-card',
       savedAddress: false,
     };
   },
@@ -331,10 +360,11 @@ export default {
       margin-bottom: 20px;
     }
 
-    .address {
-      .delivery-type {
+    .radio-container {
         display: flex;
       }
+
+    .address {
 
       a {
         color: @pink;
