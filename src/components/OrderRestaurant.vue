@@ -57,9 +57,15 @@
             <label for="delivery">Delivery</label>
           </div>
         </div>
-        <a @click="onShowAddressModal" v-if="isDeliveryType"
-          >{{addressButtonLabel}}</a
-        >
+
+        <div class="address-card" v-if="isDeliveryType && hasAddressInfo && savedAddress">
+          <p>{{ formData.street.value }}, {{ formData.number.value }}</p>
+          <p>{{ formData.city.value }} - {{ formData.cep.value }}</p>
+        </div>
+
+        <a @click="onShowAddressModal" v-if="isDeliveryType">{{
+          addressButtonLabel
+        }}</a>
       </div>
     </form>
     <button class="primary-button" @click="orderItens">Concluir pedido</button>
@@ -213,6 +219,7 @@ export default {
       },
       showAddressModal: false,
       deliveryType: "store",
+      savedAddress: false,
     };
   },
   computed: {
@@ -227,7 +234,7 @@ export default {
       return isValid;
     },
     isDeliveryType() {
-      return this.deliveryType === 'delivery';
+      return this.deliveryType === "delivery";
     },
     hasAddressInfo() {
       return (
@@ -238,7 +245,7 @@ export default {
       );
     },
     addressButtonLabel() {
-        return this.hasAddressInfo ? 'Editar Endereço' : 'Adicionar Endereço';
+      return this.hasAddressInfo ? "Editar Endereço" : "Adicionar Endereço";
     },
   },
   methods: {
@@ -264,6 +271,7 @@ export default {
     validateAddressForm() {
       this.triggerAddressFormValidations();
       if (!this.isAddressFormValid) return;
+      this.savedAddress = true;
       this.showAddressModal = false;
     },
   },
@@ -337,6 +345,21 @@ export default {
         margin: 15px 0;
         display: block;
         width: fit-content;
+      }
+
+      .address-card {
+        border-radius: 8px;
+        border: 1px solid @dark-grey;
+        padding: 10px 20px;
+        margin: 15px 0;
+        width: fit-content;
+
+        p {
+          font-weight: normal;
+          font-size: 13px;
+          color: @dark-grey;
+          margin: 5px 0;
+        }
       }
     }
 
