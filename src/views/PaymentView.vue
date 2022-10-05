@@ -2,28 +2,27 @@
   <div class="payment">
     <div class="payment--content">
       <router-link to="/" class="payment--go-back">←️ Voltar</router-link>
-      <OrderRestaurant/>
+      <OrderRestaurant />
     </div>
-    <CartRestaurant v-if="isDesktop()"/>
+    <CartRestaurant v-if="isDesktop()" />
   </div>
 </template>
 
 <script>
 import CartRestaurant from "@/components/CartRestaurant.vue";
 import Mixin from "@/mixins/mixins";
-import OrderRestaurant from '@/components/OrderRestaurant.vue';
+import OrderRestaurant from "@/components/OrderRestaurant.vue";
 
 export default {
   components: {
     CartRestaurant,
-    OrderRestaurant
+    OrderRestaurant,
   },
-  mixins: [Mixin]
-}
+  mixins: [Mixin],
+};
 </script>
 
 <style lang="less" scoped>
-
 .payment {
   display: flex;
 
@@ -38,6 +37,11 @@ export default {
       color: #000;
     }
   }
-}
 
+  @media @tablets {
+    &--content {
+      padding: 50px 20px;
+    }
+  }
+}
 </style>

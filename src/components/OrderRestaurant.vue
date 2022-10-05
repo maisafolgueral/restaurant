@@ -58,7 +58,10 @@
           </div>
         </div>
 
-        <div class="address-card" v-if="isDeliveryType && hasAddressInfo && savedAddress">
+        <div
+          class="address-card"
+          v-if="isDeliveryType && hasAddressInfo && savedAddress"
+        >
           <p>{{ formData.street.value }}, {{ formData.number.value }}</p>
           <p>{{ formData.city.value }} - {{ formData.cep.value }}</p>
         </div>
@@ -247,7 +250,7 @@ export default {
       },
       showAddressModal: false,
       deliveryType: "store",
-      paymentType: 'credit-card',
+      paymentType: "credit-card",
       savedAddress: false,
     };
   },
@@ -361,11 +364,10 @@ export default {
     }
 
     .radio-container {
-        display: flex;
-      }
+      display: flex;
+    }
 
     .address {
-
       a {
         color: @pink;
         font-weight: normal;
@@ -419,6 +421,23 @@ export default {
       & + button {
         margin-left: 15px;
       }
+    }
+  }
+
+  @media @tablets {
+    width: 100%;
+    padding: 0;
+
+    .modal-content {
+      button + button {
+          margin-left: 5px;
+        }
+      }
+
+    .address-container {
+        .input-field + .input-field {
+            margin-left: 5px;
+        }
     }
   }
 }
