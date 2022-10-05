@@ -336,6 +336,20 @@ export default {
       this.triggerValidations();
       if(!this.isUserFormDataValid || !this.isAddressFormValid) return;
       this.showSucessModal = true;
+      const phone = '5511999999999';
+      let text = `
+        Cliente: ${this.formData.name.value}
+        Contato: ${this.formData.cellphone.value}
+        Pedido: 
+        ${this.$store.state.cartList.map(item => {
+            return `
+                ${item.quantity}x ${item.name}
+                Obs: ${item.observations}
+            `
+        })}
+      `
+      text = window.encodeURIComponent(text);
+      window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${text}`);
     },
     onShowAddressModal() {
       this.showAddressModal = true;
